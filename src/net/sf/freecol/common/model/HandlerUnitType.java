@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.sf.freecol.common.model.Colony.NoBuildReason;
 
-public class AdapterUnitType extends FreeColObject implements InterfaceType {
+public class HandlerUnitType extends FreeColObject implements InterfaceType {
 
 	@Override
 	public NoBuildReason getNoBuildReason(BuildableType buildableType, List<BuildableType> assumeBuilt, Colony colony) {

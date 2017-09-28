@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.sf.freecol.common.model.Colony.NoBuildReason;
 
-public class AdapterBuildingType implements InterfaceType {
+public class HandlerBuildingType implements InterfaceType {
 
 	@Override
 	public NoBuildReason getNoBuildReason(BuildableType buildableType, List<BuildableType> assumeBuilt, Colony colony) {

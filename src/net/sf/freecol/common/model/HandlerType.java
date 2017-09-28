@@ -15,8 +15,7 @@ public class HandlerType implements InterfaceType {
 
 		else if (buildableType.hasAbility(Ability.COASTAL_ONLY) && !colony.getTile().isCoastland()) {
 			return NoBuildReason.COASTAL;
-		} 
-		else {
+		} else {
 
 			if (!all(buildableType.getRequiredAbilities().entrySet(),
 					e -> e.getValue() == colony.hasAbility(e.getKey()))) {
@@ -44,7 +43,6 @@ public class HandlerType implements InterfaceType {
 			if (!all(buildableType.getLimits(), l -> l.evaluate(colony))) {
 				return true;
 			}
-
 			return false;
 		}
 	}

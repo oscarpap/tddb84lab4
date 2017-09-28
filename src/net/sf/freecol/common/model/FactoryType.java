@@ -2,42 +2,39 @@ package net.sf.freecol.common.model;
 
 public class FactoryType {
 
-	public InterfaceType getAdapter(BuildableType type, Colony colony) {
+	private HandlerBuildingType adapterBuilding;
+	private HandlerUnitType adapterUnit;
+	private HandlerType handlerType;
+	private SimpleHandlerType simpleHandler;
 
-		// Use a hashmap
+	public InterfaceType getAdapter(BuildableType type, Colony colony) {
 
 		// List where everypart checks if it can handle , go through one by one to check
 		// who can, list where you register potential handlers
 
-		// initate handler and
-
-		SimpleHandlerType simpleHandler = new SimpleHandlerType();
-
+		
+		// Only needs the BuildableType
 		if (simpleHandler.canHandle(type)) {
 
 			return simpleHandler;
 		}
 
-		HandlerType handlerType = new HandlerType();
-
+		// Needs BuildableType and Colony
 		if (handlerType.canHandle(type, colony)) {
 
 			return handlerType;
 		}
 
+		// Needs to be correct type
 		else if (type instanceof BuildingType) {
-
-			AdapterBuildingType adapterBuilding = new AdapterBuildingType();
 
 			return adapterBuilding;
 		}
 
+		// Needs to be correct type
 		else if (type instanceof UnitType) {
 
-			AdapterUnitType adapterUnit = new AdapterUnitType();
-
 			return adapterUnit;
-
 		}
 
 		else {

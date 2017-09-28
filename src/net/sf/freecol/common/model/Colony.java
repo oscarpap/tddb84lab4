@@ -51,6 +51,12 @@ import net.sf.freecol.common.util.RandomChoice;
  * <code>Colony</code> where working is possible.
  */
 public class Colony extends Settlement implements Nameable, TradeLocation {
+	//New code start
+	private FactoryType factoryType;
+	private InterfaceType adapter;
+	
+	
+	//New code ends
 
 	private static final Logger logger = Logger.getLogger(Colony.class.getName());
 
@@ -940,11 +946,9 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
 	 * @return A <code>NoBuildReason</code> value decribing the failure, including
 	 *         <code>NoBuildReason.NONE</code> on success.
 	 */
+	
+//New code starts here
 	public NoBuildReason getNoBuildReason(BuildableType buildableType, List<BuildableType> assumeBuilt) {
-
-		FactoryType factoryType = new FactoryType();
-
-		InterfaceType adapter;
 
 		adapter = factoryType.getAdapter(buildableType, this);
 
@@ -960,6 +964,8 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
 			return NoBuildReason.NONE;
 		}
 	}
+	
+//New code ends here
 
 	/**
 	 * Returns the price for the remaining hammers and tools for the

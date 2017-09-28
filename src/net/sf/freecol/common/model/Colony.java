@@ -941,73 +941,24 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
 	 *         <code>NoBuildReason.NONE</code> on success.
 	 */
 	public NoBuildReason getNoBuildReason(BuildableType buildableType, List<BuildableType> assumeBuilt) {
-		if (buildableType == null) {
-			return NoBuildReason.NOT_BUILDING;
-		} else if (!buildableType.needsGoodsToBuild()) {
-			return NoBuildReason.NOT_BUILDABLE;
-		} else if (buildableType.getRequiredPopulation() > getUnitCount()) {
-			return NoBuildReason.POPULATION_TOO_SMALL;
-		} else if (buildableType.hasAbility(Ability.COASTAL_ONLY) && !getTile().isCoastland()) {
-			return NoBuildReason.COASTAL;
+
+		FactoryType factoryType = new FactoryType();
+
+		InterfaceType adapter;
+
+		adapter = factoryType.getAdapter(buildableType, this);
+
+		if (adapter != null) {
+
+			if (assumeBuilt == null) {
+				assumeBuilt = Collections.<BuildableType>emptyList();
+			}
+
+			return adapter.getNoBuildReason(buildableType, assumeBuilt, this);
+
 		} else {
-			if (!all(buildableType.getRequiredAbilities().entrySet(), e -> e.getValue() == hasAbility(e.getKey()))) {
-				return NoBuildReason.MISSING_ABILITY;
-			}
-			if (!all(buildableType.getLimits(), l -> l.evaluate(this))) {
-				return NoBuildReason.LIMIT_EXCEEDED;
-			}
+			return NoBuildReason.NONE;
 		}
-		if (assumeBuilt == null) {
-			assumeBuilt = Collections.<BuildableType>emptyList();
-		}
-
-		else {
-
-			FactoryType factoryType = new FactoryType();
-
-			InterfaceType adapter;
-
-			adapter = factoryType.getAdapter(buildableType);
-
-			if (adapter != null) {
-
-				return adapter.getNoBuildReason(buildableType, assumeBuilt, this);
-
-			} else {
-				return NoBuildReason.NONE;
-			}
-		}
-/*
-		if (buildableType instanceof BuildingType) {
-			BuildingType newBuildingType = (BuildingType) buildableType;
-			Building colonyBuilding = this.getBuilding(newBuildingType);
-			if (colonyBuilding == null) {
-				// the colony has no similar building yet
-				BuildingType from = newBuildingType.getUpgradesFrom();
-				if (from != null && !assumeBuilt.contains(from)) {
-					// we are trying to build an advanced factory, we
-					// should build lower level shop first
-					return NoBuildReason.WRONG_UPGRADE;
-				}
-			} else {
-				// a building of the same family already exists
-				BuildingType from = colonyBuilding.getType().getUpgradesTo();
-				if (from != newBuildingType && !assumeBuilt.contains(from)) {
-					// the existing building's next upgrade is not the
-					// new one we want to build
-					return NoBuildReason.WRONG_UPGRADE;
-				}
-			}
-		} else if (buildableType instanceof UnitType) {
-			// Non-person units need a BUILD ability, present or assumed.
-			if (!buildableType.hasAbility(Ability.PERSON) && !hasAbility(Ability.BUILD, buildableType)
-					&& none(assumeBuilt, bt -> bt.hasAbility(Ability.BUILD, buildableType))) {
-				return NoBuildReason.MISSING_BUILD_ABILITY;
-			}
-		}
-		*/
-		return NoBuildReason.NONE;
-		
 	}
 
 	/**
